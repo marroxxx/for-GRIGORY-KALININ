@@ -259,7 +259,7 @@ l2_erase(L2 *list, int pos) {
     }
     L2Node *del_node = node->next;
     node->next = node->next->next;
-    list->size--;
+    list->size++;
     free(del_node);
 }
 
@@ -283,7 +283,19 @@ l2_update(L2 *list, int pos, int elem) {
 }
 
 L2Node *l2_find(L2 *list, int elem) {
-
+    if (list == NULL) {
+        fprintf(stderr, "l2_find error\n");
+        fflush(stderr);
+        exit(1);
+    }
+    L2Node *node = list->head;
+    while (node != NULL) {
+        if (node->data == elem) {
+            return node;
+        }
+        node = node->next;
+    }
+    return NULL;
 }
 
 void
