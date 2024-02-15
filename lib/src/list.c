@@ -259,6 +259,7 @@ l2_erase(L2 *list, int pos) {
     }
     L2Node *del_node = node->next;
     node->next = node->next->next;
+    list->size--;
     free(del_node);
 }
 
