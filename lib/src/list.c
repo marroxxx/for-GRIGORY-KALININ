@@ -160,7 +160,7 @@ l_free(List *list) {
 void
 l2_push_back(L2 *list, int elem) {
     if (list == NULL) {
-        fprintf(stderr, "l2 push_back: list is NULL\n");
+        fprintf(stderr, "L2_push_back: list is NULL\n");
         fflush(stderr);
         exit(1);
     }
@@ -172,10 +172,9 @@ l2_push_back(L2 *list, int elem) {
         list->tail = list->head;
         list->size++;
     } else {
-        list->tail->next = calloc(1, sizeof(*list->tail->next));
+        list->tail->next = calloc(1, sizeof(*list->head));
         list->tail->next->data = elem;
         list->tail->next->next = NULL;
-        list->tail->next->prev = list->tail;
         list->tail = list->tail->next;
         list->size++;
     }
@@ -184,7 +183,7 @@ l2_push_back(L2 *list, int elem) {
 void
 l2_push_front(L2 *list, int elem) {
     if (list == NULL) {
-        fprintf(stderr, "l2 push_front: list is NULL\n");
+        fprintf(stderr, "L2_push_back: list is NULL\n");
         fflush(stderr);
         exit(1);
     }
@@ -196,12 +195,118 @@ l2_push_front(L2 *list, int elem) {
         list->tail = list->head;
         list->size++;
     } else {
-        list->head->prev = calloc(1, sizeof(*list->tail->next));
+        list->head->prev = calloc(1, sizeof(*list->head));
         list->head->prev->data = elem;
         list->head->prev->prev = NULL;
-        list->head->prev->next = list->tail;
+        list->head->prev->next = list->head;
         list->head = list->head->prev;
         list->size++;
     }
+}
 
+void
+l2_printf(L2 *list) {
+    L2 copy = *list;
+    while (copy.head != NULL) {
+        printf("%d ", copy.head->data);
+        copy.head = copy.head->next;
+    }
+    printf("\n");
+}
+
+void 
+l2_insert(L2 *list, int pos, int elem) {
+    if (pos < 0 || list == NULL || pos > list->size) {
+        fprintf(stderr, "l2_insert error\n");
+        fflush(stderr);
+        exit(1);
+    }
+    if (pos == list->size) {
+        l2_push_back(list, elem);
+        return;
+    } else if (pos == 0) {
+        l2_push_front(list, elem);
+        return;
+    }
+    L2Node *node = list->head;
+    for (int i = 0; i < pos - 1; ++i) {
+        node = node->next;
+    }      
+    L2Node *new_node = calloc(1, sizeof(*new_node));
+    new_node->data = elem;
+    L2Node *temp = node->next;
+    node->next = new_node;
+    new_node->next = temp;
+    list->size++;
+}
+
+void 
+l2_erase(L2 *list, int pos) {
+    if (pos < 0 || list == NULL || pos >= list->size) {
+        fprintf(stderr, "l2_erase error\n");
+        fflush(stderr);
+        exit(1);
+    }
+    if (pos == 0) {
+        L2Node *node = list->head;
+        list->head = list->head->next;
+        free(node);
+        return;
+    }
+    L2Node *node = list->head;
+    for (int i = 0; i < pos - 1; ++i) {
+        node = node->next;
+    }
+    L2Node *del_node = node->next;
+    node->next = node->next->next;
+    free(del_node);
+}
+
+void
+l2_update(L2 *list, int pos, int elem) {
+    L2Node *copy = list->head;
+    if (pos < 0 || list->head == NULL || pos >= list->size) {
+        fprintf(stderr, "l2_update pos < 0 or list == NULL\n");
+        fflush(stderr);
+        exit(1);
+    }
+    for (int i = 0; i < pos; ++i) {
+        if (copy == NULL) {
+            fprintf(stderr, "l2_update pos > size");
+            fflush(stderr);
+            exit(1);
+        }
+        copy = copy->next;
+    }
+    copy->data = elem;
+}
+
+L2Node *l2_find(L2 *list, int elem) {
+
+}
+
+void
+l2_free(L2 *list) {
+    L2 *copy = list;
+    while (1) {
+        if (list->head == NULL) {
+            break;
+        } 
+        copy->head = copy->head->next;
+        free(list->head);
+    }
+}
+
+int
+l2_get(L2 *list, int pos) {
+    if (pos == 0 || list == NULL || pos >= list->size) {
+        fprintf(stderr, "l2_get err\n");
+        fflush(stderr);
+        exit(1);
+    }
+    L2Node *node = list->head;
+    for (int i = 0; i < pos; ++i) {
+        node = node->next;
+    }
+    return node->data;
 }
