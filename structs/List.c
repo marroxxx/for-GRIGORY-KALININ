@@ -4,12 +4,18 @@
 
 int
 main(void) {
-    List *list = NULL;
-    list = l_init(list, 1);
-    list = l_push_back(list, 2);
-    list = l_insert(list, 22, 2);
-    list = l_erase(list, 0);
-    l_printf(list);
-    l_free(list);
+    L2 cop;
+    cop.head = NULL;
+    cop.tail = NULL;
+    cop.size = 0;
+    L2 *list = &cop;
+    for (int i = 0; i < 20; ++i) {
+        l2_push_back(list, i);
+        l2_push_front(list, i);
+    }
+    for (int i = 0; i < 40; ++i) {
+        l2_erase(list, 0);
+    }
+    l2_free(list);
     return 0;
 }
