@@ -17,10 +17,10 @@ typedef struct Tree {
 typedef Tree Heap;
 typedef Tree BSTree;
 
-extern void swap(void *a, void *b);
+extern void swap(int *a, int *b);
+extern TreeNode *init_node(int value);
 extern void heap_insert(Heap *heap, int elem); 
-extern void heap_erase_root(Heap *heap);
-extern void heap_make(TreeNode *node);
+extern int heap_erase_root(Heap *heap);
 extern void bst_insert(BSTree *tree, int elem);
 extern void bst_erase(BSTree *tree, int elem);
 extern void transplant(BSTree *tree, TreeNode *old, TreeNode *new);
