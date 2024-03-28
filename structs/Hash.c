@@ -19,6 +19,12 @@ main(void) {
     HashTable hash_table;
     hash_table.hash = f;
     hs_insert(&hash_table, s);
-    printf("%s\n", hash_table.arr[0].head->data);
+    char *st;
+    st = calloc(MAX_LEN, sizeof(*st));
+    fgets(st, MAX_LEN, stdin);
+    hs_insert(&hash_table, st);
+    hs_insert(&hash_table, st);
+    l2s_printf(&hash_table.arr[0]);
+    l2s_free(&hash_table.arr[0]);
     return 0;
 }   
